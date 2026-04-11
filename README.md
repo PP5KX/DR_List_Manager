@@ -1,4 +1,4 @@
-# DR List Manager
+# ICOM DR List Manager
 
 A Bash-based interactive terminal utility for creating and managing **Digital Radio (DR) repeater lists** compatible with any **ICOM** transceiver that supports **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and others). Designed for the Brazilian amateur radio community, with locale-aware formatting and full support for D-Star, FM, and FM-N operating modes.
 
@@ -259,10 +259,10 @@ flowchart TD
 ### Main Menu
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║             GESTOR DE REPETIDORAS D-Star / FM / FM-N                        ║
-║             LISTA DR ICOM                                              v3.5  ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                        GESTOR DE REPETIDORAS D-Star / FM / FM-N                          ║
+║                                    LISTA DR ICOM                                   v3.5  ║
+╚══════════════════════════════════════════════════════╝
     Arquivo  : Repeater_list.csv
     Registros: 142
     Grupos   : 27
@@ -282,9 +282,9 @@ X. Sair do Sistema
 Displays all groups with their station count. Selecting a group opens a paginated list of its repeaters, sorted alphabetically by name.
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                      RELAÇÃO DE GRUPOS CADASTRADOS                          ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                               RELAÇÃO DE GRUPOS CADASTRADOS                              ║
+╚══════════════════════════════════════════════════════╝
 
  [01] - Acre                     ( 01 estações cadastradas )
  [02] - Alagoas                  ( 01 estações cadastradas )
@@ -297,12 +297,12 @@ Displays all groups with their station count. Selecting a group opens a paginate
 **Inside a group — repeater list:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║             LISTANDO AS REPETIDORAS DO GRUPO 4 — Santa Catarina             ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                   LISTANDO AS REPETIDORAS DO GRUPO 4 — Santa Catarina                    ║
+╚══════════════════════════════════════════════════════╝
 
  Nº  | GRUPO            | REPETIDORA       | INDICATIVO | MODO | FREQUENCIA
-═════════════════════════════════════════════════════════════════════════════════
+════════════════════════════════════════════════════════
  1   | Santa Catarina   | Blumenau DV      | PP5BLU B   | DV   | 439,950000
  2   | Santa Catarina   | Chapeco FM       | PP5CHP     | FM   | 147,150000
  ...
@@ -315,9 +315,9 @@ Página 1 de 2 (18 itens)
 **Detail view of a selected repeater:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                        DETALHES DA REPETIDORA                               ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                                 DETALHES DA REPETIDORA                                   ║
+╚══════════════════════════════════════════════════════╝
 
  1.  Número do Grupo:              4
  2.  Nome do Grupo:                Santa Catarina
@@ -378,9 +378,9 @@ A guided sequential form that collects all 17 fields for a new entry. The group 
 ### Option 3 — Edit Groups
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                              EDITAR GRUPOS                                  ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                                    EDITAR GRUPOS                                         ║
+╚══════════════════════════════════════════════════════╝
 
 1. Renomear Grupo
 2. Remover Grupo  (Move repetidoras vinculadas)
@@ -397,9 +397,9 @@ X. Voltar
 Allows filtering the entire database using up to **3 combined criteria**:
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                         CONSULTA BASE DE DADOS                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                                CONSULTA BASE DE DADOS                                    ║
+╚══════════════════════════════════════════════════════╝
 
 --- Filtro 1 ---
 1) Grupo    2) Modo    3) RPT1USE    4) Call Sign    5) Frequência
@@ -425,9 +425,9 @@ Results are sorted by group name then repeater name, displayed in a paginated ta
 ### Option 5 — Manage Database
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                        GERENCIAR BASE DE DADOS                              ║
-╚══════════════════════════════════════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                                 GERENCIAR BASE DE DADOS                                  ║
+╚══════════════════════════════════════════════════════╝
     Base atual selecionada: Repeater_list.csv
     Padrão do csv: Separador [ ; ], Decimal [ , ]
 
