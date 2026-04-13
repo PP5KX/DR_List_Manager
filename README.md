@@ -1,24 +1,19 @@
-# ICOM DR List Manager
+# 🌐 ICOM DR List Manager
 
-A Bash-based interactive terminal utility for creating and managing **Digital Radio (DR) repeater lists** compatible with any **ICOM** transceiver that supports **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and others). Designed for the Brazilian amateur radio community, with locale-aware formatting and full support for D-Star, FM, and FM-N operating modes.
+<div align="center">
 
----
+![Version](https://img.shields.io/badge/Version-v3.5-blue)
+![Linux](https://img.shields.io/badge/Debian-13%2B-red)
+![License](https://img.shields.io/badge/License-GNU-yellow)
+![Maintained](https://img.shields.io/badge/Maintained-yes-green)
 
-## Table of Contents
+**Utility for managing the Repeater List (DR) of ICom DStar radios.**
 
-- [Overview](#overview)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [CSV Format](#csv-format)
-- [Menu Map](#menu-map)
-- [Menu Structure](#menu-structure)
-- [Field Reference](#field-reference)
-- [Validation Rules](#validation-rules)
-- [Usage Tips](#usage-tips)
-- [Logging](#logging)
-- [Versioning](#versioning)
-- [License](#license)
+A Bash-based interactive terminal utility for creating and managing **Digital Radio (DR) repeater lists** compatible with any **ICOM** transceiver that supports **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and others). Designed for the Amateur Radio community, with locale-aware formatting can be easily applied in any scenario.                                                                                                  
+
+[Overview](#overview) • [Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Map](#menu-map) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference) • [Validation Rules](#validation-rules) • [Usage Tips](#usage-tips) • [Logging](#logging) • [Versioning](#versioning) • [License](#license)
+
+</div>
 
 ---
 
@@ -85,7 +80,7 @@ On startup, the script automatically loads `Repeater_list.csv` from the current 
 
 ## CSV Format
 
-> ⚠️ **Brazilian locale formatting — important**
+> ⚠️ **Locale formatting — important**
 >
 > This application uses the following conventions, matching Brazilian system locale and the ICOM CS programming software behavior under `pt_BR`:
 >
@@ -102,8 +97,8 @@ The CSV contains **17 columns** in the following order:
 |---|---|---|---|
 | 1 | `Group No` | Group number (1–50) | `4` |
 | 2 | `Group Name` | Display name of the group (max 16 chars) | `Santa Catarina` |
-| 3 | `Name` | Repeater display name (max 16 chars) | `Florianopolis DV` |
-| 4 | `Sub Name` | Secondary label (max 8 chars) | `SC` |
+| 3 | `Name` | Repeater display name (max 16 chars) | `Florianopolis` |
+| 4 | `Sub Name` | Secondary label (max 8 chars) | `Centro` |
 | 5 | `Repeater Call Sign` | Local repeater callsign (max 8 chars) | `PP5ZFP B` |
 | 6 | `Gateway Call Sign` | D-Star gateway callsign (DV only, max 8 chars) | `PP5ZFP G` |
 | 7 | `Frequency` | Receive frequency in MHz | `439,975000` |
@@ -122,8 +117,8 @@ The CSV contains **17 columns** in the following order:
 
 ```
 Group No;Group Name;Name;Sub Name;Repeater Call Sign;Gateway Call Sign;Frequency;Dup;Offset;Mode;TONE;Repeater Tone;RPT1USE;Position;Latitude;Longitude;UTC Offset
-4;Santa Catarina;Florianopolis DV;SC;PP5ZFP B;PP5ZFP G;439,975000;DUP-;5,000000;DV;OFF;88,5Hz;YES;Approximate;-27,597222;-48,549167;-3:00
-4;Santa Catarina;Florianopolis FM;SC;PP5ZFP;;147,075000;DUP+;0,600000;FM;TSQL;88,5Hz;YES;Approximate;-27,597222;-48,549167;-3:00
+4;Santa Catarina;Florianopolis;Centro;PP5ZFP B;PP5ZFP G;439,975000;DUP-;5,000000;DV;OFF;88,5Hz;YES;Approximate;-27,597222;-48,549167;-3:00
+4;Santa Catarina;Florianopolis;;PP5ZFP;;147,075000;DUP+;0,600000;FM;TSQL;88,5Hz;YES;Approximate;-27,597222;-48,549167;-3:00
 5;Parana;Curitiba Simplex;;;;146,520000;OFF;0,000000;FM;OFF;88,5Hz;YES;None;0,000000;0,000000;-3:00
 ```
 
@@ -132,7 +127,7 @@ Group No;Group Name;Name;Sub Name;Repeater Call Sign;Gateway Call Sign;Frequency
 The bundled `Repeater_list.csv` follows a geographic convention suited to Brazil, though the structure is flexible enough to be adapted to any country or region:
 
 - **Group No / Group Name** — each group represents a Brazilian **state** (e.g. Group 4 = Santa Catarina, Group 5 = Paraná). For other regions, groups could represent countries, provinces, counties, or any other logical division.
-- **Name** — identifies the **city** or locality where the repeater is located (e.g. `Florianopolis DV`, `Curitiba FM`).
+- **Name** — identifies the **city** or locality where the repeater is located (e.g. `Florianopolis`, `Curitiba`).
 - **Sub Name** — an 8-character secondary label. Use it to add context when a city has multiple repeaters of the same mode, to indicate a club callsign abbreviation, a site name, or any other distinguishing detail (e.g. `Centro`, `Serra`, `146MHz`).
 
 ---
@@ -303,8 +298,8 @@ Displays all groups with their station count. Selecting a group opens a paginate
 
  Nº  | GRUPO            | REPETIDORA       | INDICATIVO | MODO | FREQUENCIA
 ════════════════════════════════════════════════════════
- 1   | Santa Catarina   | Blumenau DV      | PP5BLU B   | DV   | 439,950000
- 2   | Santa Catarina   | Chapeco FM       | PP5CHP     | FM   | 147,150000
+ 1   | Santa Catarina   | Blumenau         | PP5BLU B   | DV   | 439,950000
+ 2   | Santa Catarina   | Chapeco          | PP5CHP     | FM   | 147,150000
  ...
 
 Página 1 de 2 (18 itens)
@@ -321,8 +316,8 @@ Página 1 de 2 (18 itens)
 
  1.  Número do Grupo:              4
  2.  Nome do Grupo:                Santa Catarina
- 3.  Nome da Repetidora:           Blumenau DV
- 4.  Nome Adicional (Sub Name):    SC
+ 3.  Nome da Repetidora:           Blumenau
+ 4.  Nome Adicional (Sub Name):    Sul
  5.  Indicativo:                   PP5BLU B
  6.  Indicativo do Gateway:        PP5BLU G
  7.  Frequência:                   439,950000
@@ -522,8 +517,8 @@ All significant operations are appended to `dr_manager.log` in the script's work
 
 ```
 [2025-04-10 14:32:01] INICIO: Sistema iniciado com base: Repeater_list.csv
-[2025-04-10 14:33:45] ADICAO: Nova repetidora 'Joinville DV' adicionada ao CSV
-[2025-04-10 14:35:12] EDICAO: Repetidora 'Blumenau DV' atualizada no CSV (linha 23)
+[2025-04-10 14:33:45] ADICAO: Nova repetidora 'Joinville' adicionada ao CSV
+[2025-04-10 14:35:12] EDICAO: Repetidora 'Blumenau' atualizada no CSV (linha 23)
 [2025-04-10 14:38:00] RENOMEAR_GRUPO: Grupo 4 renomeado de 'SC' para 'Santa Catarina'
 [2025-04-10 14:40:00] EXPORT: Base exportada como Rpt20250410_01.csv
 [2025-04-10 14:41:30] FIM: Sistema encerrado pelo usuário
