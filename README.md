@@ -7,10 +7,8 @@
 ![License](https://img.shields.io/badge/License-GNU-yellow)
 ![Maintained](https://img.shields.io/badge/Maintained-yes-green)
 
-**Utility for managing the Repeater List (DR) of ICom DStar radios.**  
-Manage • Validate • Import • Export
-
-A Bash-based interactive terminal utility for creating and managing **Digital Radio (DR) repeater lists** compatible with any **ICOM** transceiver that supports **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and others). Designed for the Amateur Radio community, with locale-aware formatting can be easily applied in any scenario.                                                                                                  
+**A utility for managing Digital Repeater (DR) lists compatible with any ICOM transceiver that has ***DR mode*****  
+Manage • Validate • Import • Export                                                                                                
 
 [Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference) • [Validation Rules](#validation-rules) • [Usage Tips](#usage-tips) • [Logging](#logging)
 
@@ -20,7 +18,7 @@ A Bash-based interactive terminal utility for creating and managing **Digital Ra
 
 ## Overview
 
-Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_list_manager.sh` provides a fully interactive, menu-driven TUI (Text User Interface) to build and maintain that list directly in the terminal — no GUI tools required. Entries are stored in a plain CSV file that can be exported and imported directly into the ICOM programming software.
+Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_list_manager.sh` provides a fully interactive, menu-driven TUI (Text User Interface) to build and maintain that list directly in the terminal — no GUI tools required. Entries are stored in a plain CSV file that can be exported and imported directly into the ICOM programming software. Designed for the Amateur Radio community, with locale-aware formatting can be easily applied in any scenario.
 
 ---
 
