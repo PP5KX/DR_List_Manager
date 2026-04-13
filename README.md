@@ -1,4 +1,4 @@
-# 🌐 ICOM DR List Manager
+# ✨ ICOM DR List Manager
 
 <div align="center">
 
