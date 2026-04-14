@@ -214,11 +214,11 @@ flowchart TD
     OPT4["🔎 ADVANCED QUERY
     ─────────────────────
     Up to 3 filters:
-    · Group Exact
-    · Mode Exact
-    · RPT1USE Exact
-    · Call Sign Partial
-    · Frequency Partial"]
+    · Group (exact)
+    · Mode (exact)
+    · RPT1USE (exact)
+    · Call Sign (partial)
+    · Frequency (partial)"]
     OPT4 --> RESULTS["📊 PAGINATED RESULTS
     ─────────────────────
     Sorted by group / name
