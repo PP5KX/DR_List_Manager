@@ -2,15 +2,15 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/Version-v3.5-blue)
+![Version](https://img.shields.io/badge/Version-v3.7_en-blue)
 ![Linux](https://img.shields.io/badge/Debian-13%2B-red)
 ![License](https://img.shields.io/badge/License-GNU-yellow)
 ![Maintained](https://img.shields.io/badge/Maintained-yes-green)
 
-**A utility for managing Digital Repeater (DR) lists compatible with any ICOM transceiver that has ***DR mode*****  
-Manage • Validate • Import • Export                                                                                                
+**A utility for managing Digital Repeater (DR) lists compatible with any ICOM transceiver that has **DR mode****  
+Manage • Validate • Import • Export • Delete                                                                                                
 
-[Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference) • [Validation Rules](#validation-rules) • [Usage Tips](#usage-tips) • [Logging](#logging)
+[Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference)
 
 </div>
 
@@ -18,7 +18,7 @@ Manage • Validate • Import • Export
 
 ## Overview
 
-Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_list_manager.sh` provides a fully interactive, menu-driven TUI (Text User Interface) to build and maintain that list directly in the terminal — no GUI tools required. Entries are stored in a plain CSV file that can be exported and imported directly into the ICOM programming software. Designed for the Amateur Radio community, with locale-aware formatting can be easily applied in any scenario.
+Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_List_Manager` is a terminal-based tool for organizing, validating, and exporting these lists in the CSV format expected by ICOM's memory-channel import interface.
 
 ---
 
@@ -35,8 +35,9 @@ Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC
 - **Automatic corrections** — decimal separators (`.` → `,`), missing `Hz` suffix on tones, and mismatched offset values are fixed automatically during validation
 - **CSV import with merge** — import an external CSV and choose to replace or append to the current database; group name conflicts are resolved interactively
 - **Export with sequential naming** — exports are saved as `RptYYYYMMDD_XX.csv` with auto-incrementing sequence numbers
+- **Database deletion** — safely delete CSV files from the file list with double-confirmation protection
 - **Instance locking** — a PID-based lock file (`/tmp/dr_list_manager.lock`) prevents multiple simultaneous instances
-- **Operation log** — all add, edit, delete, import, and export actions are timestamped in `dr_manager.log`
+- **Operation log** — all add, edit, delete, import, and export actions are timestamped in `dr_manager.log` with detailed correction records
 - **Universal cancel** — press `X` at any prompt to abort the current operation and return to the previous menu
 - **Colorized prompts** — default values highlighted in orange for quick visual reference
 - **Locale-aware formatting** — uses `;` as the column separator and `,` as the decimal separator
@@ -63,17 +64,17 @@ No external packages or internet access required. Runs entirely offline.
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/DR_list_manager.git
-cd DR_list_manager
+git clone https://github.com/PP5KX/DR_List_Manager.git
+cd DR_List_Manager
 
 # Make the script executable
-chmod +x DR_list_manager.sh
+chmod +x DR_list_manager_Version5.sh
 
 # Run
-./DR_list_manager.sh
+./DR_list_manager_Version5.sh
 ```
 
-On startup, the script automatically loads `Repeater_list.csv` from the current directory if it exists. A different base file can be selected at runtime from the **Manage Database** menu (Option 5 → Option 1).
+On startup, the script automatically loads `Repeater_list.csv` from the current directory if it exists. A different base file can be selected at runtime from the **Manage Database** menu (Option 5 → 1).
 
 ---
 
@@ -104,7 +105,7 @@ The CSV contains **17 columns** in the following order:
 | 8 | `Dup` | Duplex direction | `DUP-` |
 | 9 | `Offset` | Frequency offset in MHz | `5,000000` |
 | 10 | `Mode` | Operating mode | `DV` |
-| 11 | `TONE` | Subtone type | `OFF` |
+| 11 | `TONE` | Tone type | `OFF` |
 | 12 | `Repeater Tone` | CTCSS tone with Hz suffix | `88,5Hz` |
 | 13 | `RPT1USE` | Whether RPT1 slot is used | `YES` |
 | 14 | `Position` | Coordinate precision level | `Approximate` |
@@ -125,9 +126,9 @@ Group No;Group Name;Name;Sub Name;Repeater Call Sign;Gateway Call Sign;Frequency
 
 The bundled `Repeater_list.csv` follows a geographic convention suited to Brazil, though the structure is flexible enough to be adapted to any country or region:
 
-- **Group No / Group Name** — each group represents a Brazilian **state** (e.g. Group 4 = Santa Catarina, Group 5 = Paraná). For other regions, groups could represent countries, provinces, counties, or any other logical division.
+- **Group No / Group Name** — each group represents a Brazilian **state** (e.g. Group 4 = Santa Catarina, Group 5 = Paraná). For other regions, groups could represent countries, provinces, counties, or any other division.
 - **Name** — identifies the **city** or locality where the repeater is located (e.g. `Florianopolis`, `Curitiba`).
-- **Sub Name** — an 8-character secondary label. Use it to add context when a city has multiple repeaters of the same mode, to indicate a club callsign abbreviation, a site name, or any other distinguishing detail (e.g. `Centro`, `Serra`, `146MHz`).
+- **Sub Name** — an 8-character secondary label. Use it to add context when a city has multiple repeaters of the same mode, to indicate a club callsign abbreviation, a site name, or any other distinguishing detail.
 
 ---
 
@@ -166,9 +167,9 @@ flowchart TD
     Paginated list
     sorted by name
     ─────────────────────
-    P · Next page
-    A · Prev page
-    V · Back to groups
+    N · Next page
+    P · Prev page
+    B · Back to groups
     X · Main menu"]
     GRPLIST -->|Select №| DETAIL
 
@@ -178,11 +179,11 @@ flowchart TD
     ─────────────────────
     E · Edit
     D · Delete
-    V · Back
+    B · Back
     X · Main menu"]
     DETAIL -->|E| OPT2
     DETAIL -->|D| CONFIRM_DEL{{"Confirm\ndelete?"}}
-    CONFIRM_DEL -->|s| DEL_OK(["✅ Deleted"])
+    CONFIRM_DEL -->|y| DEL_OK(["✅ Deleted"])
     CONFIRM_DEL -->|N| DETAIL
 
     OPT2["✏️ ADD / EDIT FORM
@@ -204,7 +205,8 @@ flowchart TD
     1 · Rename Group
     2 · Remove Group
     X · Back"]
-    OPT3 -->|1| RENAME["Rename → updates\nall linked entries"]
+    OPT3 -->|1| RENAME["Rename → updates
+    all linked entries"]
     OPT3 -->|2| REMOVE["Remove →
     Move to other group
     or delete all entries"]
@@ -212,18 +214,18 @@ flowchart TD
     OPT4["🔎 ADVANCED QUERY
     ─────────────────────
     Up to 3 filters:
-    · Group (exact)
-    · Mode (exact)
-    · RPT1USE (exact)
-    · Call Sign (partial)
-    · Frequency (partial)"]
+    · Group Exact
+    · Mode Exact
+    · RPT1USE Exact
+    · Call Sign Partial
+    · Frequency Partial"]
     OPT4 --> RESULTS["📊 PAGINATED RESULTS
     ─────────────────────
     Sorted by group / name
     ─────────────────────
-    P · Next page
-    A · Prev page
-    V · New search
+    N · Next page
+    P · Prev page
+    S · New search
     X · Main menu"]
     RESULTS -->|Select №| DETAIL
 
@@ -233,18 +235,24 @@ flowchart TD
     2 · Import CSV
     3 · Export CSV
     4 · Validate database
-    5 · Clear database
+    5 · Delete database
+    6 · Clear database
     X · Back"]
-    OPT5 -->|1| SEL["Select or create\na CSV base file"]
+    OPT5 -->|1| SEL["Select or create
+    a CSV base file"]
     OPT5 -->|2| IMP["Validate external CSV
     → Replace or Append
     → Resolve group conflicts"]
-    OPT5 -->|3| EXP["Save as\nRptYYYYMMDD_XX.csv"]
+    OPT5 -->|3| EXP["Save as
+    RptYYYYMMDD_XX.csv"]
     OPT5 -->|4| VAL["Validate active DB
     Per-line: Correct /
     Skip / Abort"]
-    OPT5 -->|5| CLR{{"Confirm\nclear?"}}
-    CLR -->|s| CLEARED(["✅ Header only kept"])
+    OPT5 -->|5| DEL["Select CSV to delete
+    with double confirmation"]
+    OPT5 -->|6| CLR{{"Confirm
+    clear?"}}
+    CLR -->|y| CLEARED(["✅ Header only kept"])
     CLR -->|N| OPT5
 ```
 
@@ -252,19 +260,21 @@ flowchart TD
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                        GESTOR DE REPETIDORAS D-Star / FM / FM-N                          ║
-║                                    LISTA DR ICOM                                   v3.5  ║
+║            REPEATER MANAGER - D-Star / FM            ║
+║               ICOM DR LIST          v3.7_en  ║
 ╚══════════════════════════════════════════════════════╝
-    Arquivo  : Repeater_list.csv
-    Registros: 142
-    Grupos   : 27
+    File     : Repeater_list.csv
+    Records  : 142
+    Groups   : 27
 
-1. Editar Repetidoras  (Listar / Editar / Excluir)
-2. Adicionar Repetidora
-3. Editar Grupos  (Renomear / Remover)
-4. Consulta Geral  (Filtros Avançados)
-5. Gerenciar Base de Dados
-X. Sair do Sistema
+1. Edit Repeaters  (List / Edit / Delete)
+2. Add Repeater
+3. Edit Groups  (Rename / Remove)
+4. General Query  (Advanced Filters)
+5. Manage Database
+X. Exit System
+═══════════════════════════════════════════════════════
+Choose an option:
 ```
 
 ---
@@ -275,92 +285,93 @@ Displays all groups with their station count. Selecting a group opens a paginate
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                               RELAÇÃO DE GRUPOS CADASTRADOS                              ║
+║               LIST OF REGISTERED GROUPS              ║
 ╚══════════════════════════════════════════════════════╝
 
- [01] - Acre                     ( 01 estações cadastradas )
- [02] - Alagoas                  ( 01 estações cadastradas )
- [04] - Santa Catarina           ( 18 estações cadastradas )
+ [01] - Acre                     ( 01 stations registered )
+ [02] - Alagoas                  ( 01 stations registered )
+ [04] - Santa Catarina           ( 18 stations registered )
  ...
 
->> Digite o número do grupo (ou [X] Menu Principal):
+>> Type the group number (or [X] Main Menu):
 ```
 
 **Inside a group — repeater list:**
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                   LISTANDO AS REPETIDORAS DO GRUPO 4 — Santa Catarina                    ║
+║      LISTING REPEATERS FROM GROUP 4 — Santa Catarina ║
 ╚══════════════════════════════════════════════════════╝
 
- Nº  | GRUPO            | REPETIDORA       | INDICATIVO | MODO | FREQUENCIA
+ No  | GROUP            | REPEATER         | CALLSIGN   | MODE | FREQUENCY
 ════════════════════════════════════════════════════════
  1   | Santa Catarina   | Blumenau         | PP5BLU B   | DV   | 439,950000
  2   | Santa Catarina   | Chapeco          | PP5CHP     | FM   | 147,150000
  ...
 
-Página 1 de 2 (18 itens)
-[P] Próx pg | [A] Pág anterior | [V] Voltar Grupos | [X] Menu Principal
->> Nº para detalhar (ou tecla indicada):
+Page 1 of 2 (18 items)
+[N] Next pg | [P] Prev pg | [B] Back Groups | [X] Main Menu
+>> Number to detail (or indicated key):
 ```
 
 **Detail view of a selected repeater:**
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                                 DETALHES DA REPETIDORA                                   ║
+║              REPEATER DETAILS                        ║
 ╚══════════════════════════════════════════════════════╝
 
- 1.  Número do Grupo:              4
- 2.  Nome do Grupo:                Santa Catarina
- 3.  Nome da Repetidora:           Blumenau
- 4.  Nome Adicional (Sub Name):    Sul
- 5.  Indicativo:                   PP5BLU B
- 6.  Indicativo do Gateway:        PP5BLU G
- 7.  Frequência:                   439,950000
+ 1.  Group Number:                 4
+ 2.  Group Name:                   Santa Catarina
+ 3.  Repeater Name:                Blumenau
+ 4.  Sub Name:                     Sul
+ 5.  Callsign:                     PP5BLU B
+ 6.  Gateway Callsign:             PP5BLU G
+ 7.  Frequency:                    439,950000
  8.  Duplex (DUP):                 DUP-
- 9.  Offset Freq.:                 5,000000
- 10. Modo de Operação:             DV
- 11. Tipo de subtom:               OFF
- 12. Frequência do subtom:         88,5Hz
+ 9.  Freq. Offset:                 5,000000
+ 10. Operation Mode:               DV
+ 11. TONE Type:                    OFF
+ 12. Repeater Tone:                88,5Hz
  13. USE (From):                   YES
- 14. Localização:                  Approximate
+ 14. Location:                     Approximate
  15. Latitude:                     -26,919444
  16. Longitude:                    -49,065556
  17. UTC Offset:                   -3:00
 
-[E] Editar | [D] Excluir | [V] Voltar | [X] Menu Principal
+[E] Edit | [D] Delete | [B] Back | [X] Main Menu
+>> Option:
 ```
 
 ---
 
 ### Option 2 — Add Repeater
 
-A guided sequential form that collects all 17 fields for a new entry. The group name is auto-filled if the group number already exists in the database. For FM/FM-N modes, a numbered CTCSS tone table is displayed inline for easy selection.
+A guided sequential form that collects all 17 fields for a new entry. The group name is auto-filled if the group number already exists in the database. For FM/FM-N modes, a numbered CTCSS tone table is displayed during the Repeater Tone selection step.
 
 **Field entry flow:**
 
 ```
->> Group No (1-50) [Enter mantém: 4 | X p/ cancelar]: _
-  >> Group Name associado automaticamente: Santa Catarina
->> Name [X p/ cancelar]: _
->> Sub Name [X p/ cancelar]: _
+>> Group No (1-50) [Enter keeps: 4 | X to cancel]: _
+  >> Associated Group Name: Santa Catarina
+>> Name [X to cancel]: _
+>> Sub Name [X to cancel]: _
   Mode: 1) DV   2) FM   3) FM-N
->> Escolha (1-3) [X p/ cancelar]: _
+>> Choose (1-3) [X to cancel]: _
   Dup: 1) OFF   2) DUP-   3) DUP+
->> Escolha (1-3) [X p/ cancelar]: _
->> Offset (ex: 5,000000) [X p/ cancelar]: _
->> Frequency (ex: 439,975000) [X p/ cancelar]: _
->> Repeater Call Sign [X p/ cancelar]: _
->> Gateway Call Sign [X p/ cancelar]: _       ← DV duplex only
+>> Choose (1-3) [X to cancel]: _
+>> Offset (ex: 5,000000) [X to cancel]: _
+>> Frequency (ex: 439,975000) [X to cancel]: _
+>> Repeater Call Sign [X to cancel]: _
+>> Gateway Call Sign [X to cancel]: _       ← DV duplex only
   (CTCSS table shown for FM/FM-N)
   RPT1USE: 1) YES   2) NO
->> Escolha (1-2) [X p/ cancelar]: _
+>> Choose (1-2) [X to cancel]: _
   Position: 1) None   2) Approximate   3) Exact
->> Escolha (1-3) [X p/ cancelar]: _
->> Latitude (ex: -26,149167) [X p/ cancelar]: _
->> Longitude (ex: -49,812167) [X p/ cancelar]: _
->> UTC Offset (ex: -3:00) [X p/ cancelar]: _
+>> Choose (1-3) [X to cancel]: _
+>> Latitude (ex: -26,149167) [X to cancel]: _
+>> Longitude (ex: -49,812167) [X to cancel]: _
+>> UTC Offset (ex: -3:00) [X to cancel]: _
 ```
 
 > The same form is reused for **editing** an existing repeater (reached from Option 1 → detail view → `[E]`), pre-populated with all current values.
@@ -371,12 +382,12 @@ A guided sequential form that collects all 17 fields for a new entry. The group 
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                                    EDITAR GRUPOS                                         ║
+║                   EDIT GROUPS                        ║
 ╚══════════════════════════════════════════════════════╝
 
-1. Renomear Grupo
-2. Remover Grupo  (Move repetidoras vinculadas)
-X. Voltar
+1. Rename Group
+2. Remove Group  (Move linked repeaters)
+X. Back
 ```
 
 - **Rename** — updates the group name across every repeater entry that belongs to that group.
@@ -390,26 +401,26 @@ Allows filtering the entire database using up to **3 combined criteria**:
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                                CONSULTA BASE DE DADOS                                    ║
+║              QUERY DATABASE                          ║
 ╚══════════════════════════════════════════════════════╝
 
---- Filtro 1 ---
-1) Grupo    2) Modo    3) RPT1USE    4) Call Sign    5) Frequência
-Escolha o campo pelo número (ou [Enter] / X para cancelar):
+--- Filter 1 ---
+1) Group    2) Mode    3) RPT1USE    4) Call Sign    5) Frequency
+Choose the field by number (or [Enter] / X to cancel):
 ```
 
 | Filter | Match type | Description |
 |---|---|---|
-| **Grupo** | Exact | Select from a numbered list of available groups |
-| **Modo** | Exact | Choose DV, FM, or FM-N |
+| **Group** | Exact | Select from a numbered list of available groups |
+| **Mode** | Exact | Choose DV, FM, or FM-N |
 | **RPT1USE** | Exact | Choose YES or NO |
 | **Call Sign** | Partial | Text search against the Repeater Call Sign field |
-| **Frequência** | Partial | Text search against the Frequency field |
+| **Frequency** | Partial | Text search against the Frequency field |
 
 Results are sorted by group name then repeater name, displayed in a paginated table. Selecting an entry number opens the full detail view, from which the entry can also be edited or deleted directly.
 
 ```
-[P] Próx pg | [A] Pág anterior | [V] Nova Busca | [X] Menu Principal
+[N] Next pg | [P] Prev pg | [S] New Search | [X] Main Menu
 ```
 
 ---
@@ -418,26 +429,28 @@ Results are sorted by group name then repeater name, displayed in a paginated ta
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                                 GERENCIAR BASE DE DADOS                                  ║
+║             MANAGE DATABASE                          ║
 ╚══════════════════════════════════════════════════════╝
-    Base atual selecionada: Repeater_list.csv
-    Padrão do csv: Separador [ ; ], Decimal [ , ]
+    Currently selected base: Repeater_list.csv
+    CSV standard: Separator [ ; ], Decimal [ , ]
 
-1. Selecionar Arquivo CSV Base
-2. Importar CSV
-3. Exportar DR_list.csv  (RptYYYYMMDD_XX.csv)
-4. Validar Base de Dados
-5. Limpar Base de Dados  (Mantém apenas cabeçalho)
-X. Retornar
+1. Select Base CSV File
+2. Import CSV
+3. Export DR_list.csv  (RptYYYYMMDD_XX.csv)
+4. Validate Database
+5. Delete Database
+6. Clear Database  (Keep header only)
+X. Return
 ```
 
 | Option | Description |
 |---|---|
 | **1 — Select CSV** | Switch the active database file. Lists all `.csv` files in the current directory. Can create a new empty base on the fly. |
-| **2 — Import CSV** | Validate and import an external CSV. After validation, choose to **replace** the current database or **append** records to it. Group name conflicts between source and target are detected and resolved interactively. |
+| **2 — Import CSV** | Validate and import an external CSV. After validation, choose to **Replace** the current database or **Append** records to it. Group name conflicts between source and target are resolved interactively with [K]eep or [U]pdate options. |
 | **3 — Export** | Save a copy of the current database as `RptYYYYMMDD_XX.csv`, where `XX` is an auto-incrementing sequence number to avoid overwriting previous exports from the same day. |
-| **4 — Validate** | Run the full validation engine on the active database. Errors are shown line by line with the options to **Correct** interactively, **Skip** the offending line, or **Abort** the process. Silent automatic fixes are also applied (decimal separators, tone suffixes, offset normalization). |
-| **5 — Clear** | Erase all records, retaining only the CSV header row. Requires explicit confirmation. Also removes backup files older than 7 days. |
+| **4 — Validate** | Run the full validation engine on the active database. Errors are shown line by line with the options to **Correct** interactively, **Skip** the offending line, or **Abort** the process. All automatic corrections are logged with details. |
+| **5 — Delete** | List all available CSV files (excluding the currently active base). Select one to delete with a double-confirmation prompt. Prevents accidental deletion of the working database. |
+| **6 — Clear** | Erase all records, retaining only the CSV header row. Requires explicit confirmation. Also removes backup files older than 7 days. |
 
 ---
 
@@ -491,7 +504,7 @@ The validation engine (shared by both the manual add/edit form and the CSV impor
 - **Duplicate entries** — records sharing the same Group No + Name + Frequency combination are flagged as duplicates.
 - **Mode-field consistency** — DV entries must have `TONE=OFF` and `Repeater Tone=88,5Hz`; FM/FM-N entries must have a valid non-empty CTCSS tone.
 - **Simplex entries** — both `Repeater Call Sign` and `Gateway Call Sign` must be empty when `Dup=OFF`.
-- **Automatic silent corrections** — the following are fixed without user interaction: period-based decimal separators (`.` → `,`), missing `Hz` suffix on Repeater Tone values, and non-zero Offset values on simplex entries.
+- **Automatic silent corrections** — the following are fixed without user interaction: period-based decimal separators (`.` → `,`), missing `Hz` suffix on Repeater Tone values, and non-zero Offset values when Dup=OFF. All corrections are logged in `dr_manager.log` with line-by-line details.
 
 ---
 
@@ -505,6 +518,7 @@ The validation engine (shared by both the manual add/edit form and the CSV impor
 - **ICOM programming software** — import the exported CSV through the CS software (CS-51, CS-52, CS-5100, etc.) using the memory channel CSV import function.
 - **The `;` character is forbidden** in all text fields and will be rejected with an error at entry time.
 - **Single instance** — the script uses a PID lock file at `/tmp/dr_list_manager.lock`. If a previous session crashed and left a stale lock, the script detects and removes it automatically on next launch.
+- **Database deletion** — use Option 5 → 5 to safely remove old or unused CSV files. The currently active database cannot be deleted; switch to another base first if needed.
 
 ---
 
@@ -513,15 +527,17 @@ The validation engine (shared by both the manual add/edit form and the CSV impor
 All significant operations are appended to `dr_manager.log` in the script's working directory:
 
 ```
-[2025-04-10 14:32:01] INICIO: Sistema iniciado com base: Repeater_list.csv
-[2025-04-10 14:33:45] ADICAO: Nova repetidora 'Joinville' adicionada ao CSV
-[2025-04-10 14:35:12] EDICAO: Repetidora 'Blumenau' atualizada no CSV (linha 23)
-[2025-04-10 14:38:00] RENOMEAR_GRUPO: Grupo 4 renomeado de 'SC' para 'Santa Catarina'
-[2025-04-10 14:40:00] EXPORT: Base exportada como Rpt20250410_01.csv
-[2025-04-10 14:41:30] FIM: Sistema encerrado pelo usuário
+[2025-04-14 14:32:01] START: System started with base: Repeater_list.csv
+[2025-04-14 14:33:45] ADD: New repeater 'Joinville' added to CSV
+[2025-04-14 14:35:12] EDIT: Repeater 'Blumenau' updated in CSV (line 23)
+[2025-04-14 14:38:00] RENAME_GROUP: Group 4 renamed from 'SC' to 'Santa Catarina'
+[2025-04-14 14:40:00] EXPORT: Base exported as Rpt20250414_01.csv
+[2025-04-14 14:41:15] DELETE_BASE: Database file deleted: old_rpt_list.csv
+[2025-04-14 14:42:30] IMPORT_AUTO_CORRECTION_LINE_5: Group: 01 | Name: Rio Branco | Corrections: Frequency: converted decimal point to comma (146.520000 -> 146,520000). Repeater Tone: added Hz suffix (88,5 -> 88,5Hz).
+[2025-04-14 14:43:45] END: System closed by user
 ```
 
-Logged event types: `INICIO`, `FIM`, `ADICAO`, `EDICAO`, `EXCLUSAO`, `EXCLUSAO_GRUPO`, `RENOMEAR_GRUPO`, `MOVER_GRUPO`, `SELECAO_BASE`, `IMPORT`, `EXPORT`, `LIMPEZA`.
+Logged event types: `START`, `END`, `ADD`, `EDIT`, `DELETE`, `DELETE_GROUP`, `DELETE_BASE`, `RENAME_GROUP`, `MOVE_GROUP`, `BASE_SELECT`, `IMPORT`, `EXPORT`, `CLEANUP`, `IMPORT_AUTO_CORRECTION_LINE_*`, `IMPORT_VALIDATION_IGNORED`, `IMPORT_VALIDATION_CORRECTED`, `IMPORT_VALIDATION_SUMMARY`.
 
 ---
 
@@ -529,10 +545,11 @@ Logged event types: `INICIO`, `FIM`, `ADICAO`, `EDICAO`, `EXCLUSAO`, `EXCLUSAO_G
 
 This project follows **semantic versioning**:
 
-- **Decimal increments** (e.g. `3.4` → `3.5`) — bug fixes, minor UX improvements, or small feature additions.
+- **Decimal increments** (e.g. `3.6` → `3.7`) — bug fixes, minor UX improvements, or small feature additions.
 - **Whole-number increments** (e.g. `3.x` → `4.0`) — significant new features or structural changes.
+- **Language suffix** (e.g. `3.7_en`) — indicates English localization version.
 
-The current version (**3.5**) is displayed in the application header on every startup.
+The current version (**3.7_en**) is displayed in the application header on every startup.
 
 ---
 
