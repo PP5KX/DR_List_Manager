@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/Version-v3.7_en-blue)
+![Version](https://img.shields.io/badge/Version-v3.8_en-blue)
 ![Linux](https://img.shields.io/badge/Debian-13%2B-red)
 ![License](https://img.shields.io/badge/License-GNU-yellow)
 ![Maintained](https://img.shields.io/badge/Maintained-yes-green)
@@ -10,7 +10,7 @@
 **A utility for managing Digital Repeater (DR) lists compatible with any ICOM transceiver that has **DR mode****  
 Manage • Validate • Import • Export • Delete                                                                                                
 
-[Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference)
+[Features](#features) • [Requirements](#requirements) • [Installation](#installation) • [CSV Format](#csv-format) • [Menu Structure](#menu-structure) • [Field Reference](#field-reference) • [Validation Rules](#validation-rules) • [Usage Tips](#usage-tips) • [Logging](#logging)
 
 </div>
 
@@ -18,7 +18,7 @@ Manage • Validate • Import • Export • Delete
 
 ## Overview
 
-Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_List_Manager` is a terminal-based tool for organizing, validating, and exporting these lists in the CSV format expected by ICOM's memory-channel import interface.
+Any ICOM transceiver equipped with **DR mode** (ID-31, ID-51, ID-52, ID-5100, IC-9700, and similar models) can load a structured repeater list through the respective **CS** programming software. `DR_list_manager.sh` provides a fully interactive, menu-driven TUI (Text User Interface) to build and maintain that list directly in the terminal — no GUI tools required. Entries are stored in a plain CSV file that can be exported and imported directly into the ICOM programming software. Designed for the Amateur Radio community, with locale-aware formatting can be easily applied in any scenario.
 
 ---
 
@@ -68,10 +68,10 @@ git clone https://github.com/PP5KX/DR_List_Manager.git
 cd DR_List_Manager
 
 # Make the script executable
-chmod +x DR_list_manager_Version5.sh
+chmod +x DR_list_manager.sh
 
 # Run
-./DR_list_manager_Version5.sh
+./DR_list_manager.sh
 ```
 
 On startup, the script automatically loads `Repeater_list.csv` from the current directory if it exists. A different base file can be selected at runtime from the **Manage Database** menu (Option 5 → 1).
@@ -128,7 +128,7 @@ The bundled `Repeater_list.csv` follows a geographic convention suited to Brazil
 
 - **Group No / Group Name** — each group represents a Brazilian **state** (e.g. Group 4 = Santa Catarina, Group 5 = Paraná). For other regions, groups could represent countries, provinces, counties, or any other division.
 - **Name** — identifies the **city** or locality where the repeater is located (e.g. `Florianopolis`, `Curitiba`).
-- **Sub Name** — an 8-character secondary label. Use it to add context when a city has multiple repeaters of the same mode, to indicate a club callsign abbreviation, a site name, or any other distinguishing detail.
+- **Sub Name** — an 8-character secondary label. Use it to add context when a city has multiple repeaters of the same mode, to indicate a club callsign abbreviation, a site name, or any other distinguishing detail, (e.g. `Centro`, `Serra`, `146MHz`).
 
 ---
 
@@ -260,8 +260,8 @@ flowchart TD
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║            REPEATER MANAGER - D-Star / FM            ║
-║               ICOM DR LIST          v3.7_en  ║
+║                             REPEATER MANAGER - D-Star / FM                               ║
+║                                     ICOM DR LIST                                v3.8_en  ║
 ╚══════════════════════════════════════════════════════╝
     File     : Repeater_list.csv
     Records  : 142
@@ -285,7 +285,7 @@ Displays all groups with their station count. Selecting a group opens a paginate
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║               LIST OF REGISTERED GROUPS              ║
+║                              LIST OF REGISTERED GROUPS                                   ║
 ╚══════════════════════════════════════════════════════╝
 
  [01] - Acre                     ( 01 stations registered )
@@ -300,7 +300,7 @@ Displays all groups with their station count. Selecting a group opens a paginate
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║      LISTING REPEATERS FROM GROUP 4 — Santa Catarina ║
+║                     LISTING REPEATERS FROM GROUP 4 — Santa Catarina                      ║
 ╚══════════════════════════════════════════════════════╝
 
  No  | GROUP            | REPEATER         | CALLSIGN   | MODE | FREQUENCY
@@ -318,7 +318,7 @@ Page 1 of 2 (18 items)
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║              REPEATER DETAILS                        ║
+║                                  REPEATER DETAILS                                        ║
 ╚══════════════════════════════════════════════════════╝
 
  1.  Group Number:                 4
@@ -382,7 +382,7 @@ A guided sequential form that collects all 17 fields for a new entry. The group 
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║                   EDIT GROUPS                        ║
+║                                     EDIT GROUPS                                          ║
 ╚══════════════════════════════════════════════════════╝
 
 1. Rename Group
@@ -401,7 +401,7 @@ Allows filtering the entire database using up to **3 combined criteria**:
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║              QUERY DATABASE                          ║
+║                                    QUERY DATABASE                                        ║
 ╚══════════════════════════════════════════════════════╝
 
 --- Filter 1 ---
@@ -429,7 +429,7 @@ Results are sorted by group name then repeater name, displayed in a paginated ta
 
 ```
 ╔══════════════════════════════════════════════════════╗
-║             MANAGE DATABASE                          ║
+║                                   MANAGE DATABASE                                        ║
 ╚══════════════════════════════════════════════════════╝
     Currently selected base: Repeater_list.csv
     CSV standard: Separator [ ; ], Decimal [ , ]
@@ -549,7 +549,7 @@ This project follows **semantic versioning**:
 - **Whole-number increments** (e.g. `3.x` → `4.0`) — significant new features or structural changes.
 - **Language suffix** (e.g. `3.7_en`) — indicates English localization version.
 
-The current version (**3.7_en**) is displayed in the application header on every startup.
+The current version (**3.8_en**) is displayed in the application header on every startup.
 
 ---
 
